@@ -1,9 +1,10 @@
 import { id } from './userId';
 var idtostring = String(id);
+import onError from './geolocationUpdate';
 module.exports = {
   background: function() {
     // Get Location
-    navigator.geolocation.getCurrentPosition(showPosition);
+    navigator.geolocation.getCurrentPosition(showPosition, onError, { enableHighAccuracy: true });
     function showPosition(position) {
         // find user by userId
     db.collection('geolocation').where('userId', '==', idtostring).get().then((snapshot) => {
