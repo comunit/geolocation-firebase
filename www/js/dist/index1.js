@@ -98,7 +98,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({13:[function(require,module,exports) {
+})({11:[function(require,module,exports) {
 module.exports = {
   disconnectedMessage: function disconnectedMessage(message) {
     var div = document.getElementsByClassName('success-hide');
@@ -111,12 +111,12 @@ module.exports = {
     }, 8000);
   }
 };
-},{}],12:[function(require,module,exports) {
+},{}],13:[function(require,module,exports) {
 module.exports = {
   markersarray: [],
   initialLocation: []
 };
-},{}],5:[function(require,module,exports) {
+},{}],4:[function(require,module,exports) {
 userId = function (_userId) {
     function userId() {
         return _userId.apply(this, arguments);
@@ -134,7 +134,7 @@ userId = function (_userId) {
 module.exports = {
     id: userId()
 };
-},{}],15:[function(require,module,exports) {
+},{}],12:[function(require,module,exports) {
 'use strict';
 
 var _markers = require('./markers');
@@ -202,18 +202,18 @@ module.exports = {
     });
   }
 };
-},{"./markers":12,"./userId":5}],6:[function(require,module,exports) {
+},{"./markers":13,"./userId":4}],5:[function(require,module,exports) {
 module.exports = {
   socket: io.connect('https://geolocation-comunit.herokuapp.com'),
   socketId: []
   // https://geolocation-comunit.herokuapp.com/
 
 };
-},{}],14:[function(require,module,exports) {
+},{}],10:[function(require,module,exports) {
 module.exports = {
   nameOfUser: []
 };
-},{}],16:[function(require,module,exports) {
+},{}],14:[function(require,module,exports) {
 'use strict';
 
 var _socket = require('./socket');
@@ -271,7 +271,7 @@ module.exports = {
     });
   })
 };
-},{"./socket":6,"./userId":5,"./checkformsubmited":14,"./markers":12}],3:[function(require,module,exports) {
+},{"./socket":5,"./userId":4,"./checkformsubmited":10,"./markers":13}],2:[function(require,module,exports) {
 'use strict';
 
 var _disconnected = require('./disconnected');
@@ -318,7 +318,7 @@ function handleform(e) {
   (0, _map.initMap)();
   e.preventDefault();
 }
-},{"./disconnected":13,"./map":15,"./userId":5,"./markers":12,"./socket":6,"./socketConnectionCheck":16,"./checkformsubmited":14}],4:[function(require,module,exports) {
+},{"./disconnected":11,"./map":12,"./userId":4,"./markers":13,"./socket":5,"./socketConnectionCheck":14,"./checkformsubmited":10}],3:[function(require,module,exports) {
 'use strict';
 
 var _checkformsubmited = require('./checkformsubmited');
@@ -342,7 +342,7 @@ module.exports = {
     }
   }
 };
-},{"./checkformsubmited":14}],7:[function(require,module,exports) {
+},{"./checkformsubmited":10}],6:[function(require,module,exports) {
 'use strict';
 
 var _markers = require('./markers');
@@ -365,7 +365,7 @@ module.exports = {
     });
   })
 };
-},{"./markers":12,"./socket":6,"./disconnected":13}],8:[function(require,module,exports) {
+},{"./markers":13,"./socket":5,"./disconnected":11}],7:[function(require,module,exports) {
 'use strict';
 
 var _userId = require('./userId');
@@ -389,10 +389,10 @@ module.exports = {
   },
 
   onError: function onError(error) {
-    alert('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
+    console.log('code: ' + error.code + '\n' + 'message: ' + error.message + '\n');
   }
 };
-},{"./userId":5}],9:[function(require,module,exports) {
+},{"./userId":4}],8:[function(require,module,exports) {
 'use strict';
 
 var _userId = require('./userId');
@@ -405,10 +405,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var idtostring = String(_userId.id);
 
+
+var geolocationOptions = {
+  enableHighAccuracy: true
+};
+
 module.exports = {
   background: function background() {
     // Get Location
-    navigator.geolocation.getCurrentPosition(showPosition, _geolocationUpdate2.default, { enableHighAccuracy: true });
+    cordova.plugins.locationServices.geolocation.getCurrentPosition(showPosition, _geolocationUpdate2.default, geolocationOptions);
+
     function showPosition(position) {
       // find user by userId
       db.collection('geolocation').where('userId', '==', idtostring).get().then(function (snapshot) {
@@ -424,7 +430,7 @@ module.exports = {
     }
   }
 };
-},{"./userId":5,"./geolocationUpdate":8}],1:[function(require,module,exports) {
+},{"./userId":4,"./geolocationUpdate":7}],1:[function(require,module,exports) {
 'use strict';
 
 var _formhandle = require('./formhandle');
@@ -457,7 +463,7 @@ document.addEventListener('deviceready', function () {
     cordova.plugins.backgroundMode.disableWebViewOptimizations();
     interval = setInterval(function () {
       (0, _cordovaBackground.background)();
-    }, 1000);
+    }, 2000);
   };
 
   cordova.plugins.backgroundMode.ondeactivate = function () {
@@ -465,11 +471,14 @@ document.addEventListener('deviceready', function () {
   };
 }, false);
 
-// get position of user every 2 seconds
-if (navigator.geolocation) {
+var geolocationOptions = {
+  enableHighAccuracy: true
+
+  // get position of user every 2 seconds
+};if (navigator.geolocation) {
   setInterval(function () {
-    navigator.geolocation.getCurrentPosition(_geolocationUpdate.showPosition, _geolocationUpdate.onError, { enableHighAccuracy: true });
-  }, 1000);
+    cordova.plugins.locationServices.geolocation.getCurrentPosition(_geolocationUpdate.showPosition, _geolocationUpdate.onError, geolocationOptions);
+  }, 2000);
 } else {
   alert('Geolocation is not supported by this browser.');
 }
@@ -495,7 +504,7 @@ db.collection('geolocation').onSnapshot(function (snapshot) {
     });
   }
 });
-},{"./formhandle":3,"./success":4,"./userId":5,"./socket":6,"./handledisconnect":7,"./geolocationUpdate":8,"./cordova-background":9}],17:[function(require,module,exports) {
+},{"./formhandle":2,"./success":3,"./userId":4,"./socket":5,"./handledisconnect":6,"./geolocationUpdate":7,"./cordova-background":8}],15:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -524,7 +533,7 @@ var parent = module.bundle.parent;
 // if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
 //   var hostname = '' || location.hostname;
 //   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-//   var ws = new WebSocket(protocol + '://' + hostname + ':' + '53690' + '/');
+//   var ws = new WebSocket(protocol + '://' + hostname + ':' + '60131' + '/');
 //   ws.onmessage = function (event) {
 //     var data = JSON.parse(event.data);
 
@@ -665,5 +674,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[17,1], null)
+},{}]},{},[15,1], null)
 //# sourceMappingURL=/index1.map

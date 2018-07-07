@@ -10,10 +10,10 @@
     "cordova-plugin-background-mode": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-geolocation": {
+    "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     },
-    "cordova-plugin-whitelist": {
+    "cordova-plugin-locationservices": {
       "PACKAGE_NAME": "io.cordova.hellocordova"
     }
   },

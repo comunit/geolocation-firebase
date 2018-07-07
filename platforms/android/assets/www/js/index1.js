@@ -10,7 +10,8 @@ import {
   handledisconnect
 } from './handledisconnect';
 import {
-  showPosition, onError
+  showPosition,
+  onError
 } from './geolocationUpdate';
 import {
   background
@@ -26,7 +27,7 @@ document.addEventListener('deviceready', function () {
     cordova.plugins.backgroundMode.disableWebViewOptimizations();
     interval = setInterval(function () {
       background();
-    }, 1000);
+    }, 2000);
   }
 
   cordova.plugins.backgroundMode.ondeactivate = function () {
@@ -34,11 +35,17 @@ document.addEventListener('deviceready', function () {
   };
 }, false);
 
+var geolocationOptions = {
+  enableHighAccuracy: true
+}
+
 // get position of user every 2 seconds
 if (navigator.geolocation) {
   setInterval(function () {
-    navigator.geolocation.getCurrentPosition(showPosition, onError, { enableHighAccuracy: true });
-  }, 1000);
+    cordova.plugins.locationServices.geolocation.getCurrentPosition(showPosition,
+      onError,
+      geolocationOptions);
+  }, 2000);
 } else {
   alert('Geolocation is not supported by this browser.');
 }

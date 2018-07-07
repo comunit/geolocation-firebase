@@ -20,7 +20,7 @@ module.exports = {
     },
 
   onError: function onError(error) {
-    alert('code: ' + error.code + '\n' +
+    console.log('code: ' + error.code + '\n' +
       'message: ' + error.message + '\n');
   }
 }
